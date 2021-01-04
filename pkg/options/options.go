@@ -17,7 +17,7 @@ const DecryptCmd string = "open"
 var ExpectedOrganization string = getEnvWithDefault("SECRETS_ORG", "jobbatical")
 var ExpectedRepoHost string = getEnvWithDefault("SECRETS_REPO_HOST", "github.com")
 var KeyRing string = getEnvWithDefault("SECRETS_KEY_RING", "immi-project-secrets")
-var Location string = getEnvWithDefault("SECRETS_KEY_LOCATION", "global")
+var KeyLocation string = getEnvWithDefault("SECRETS_KEY_LOCATION", "global")
 
 var DryRun bool
 var Key string
@@ -98,7 +98,7 @@ func init() {
 	flag.StringVar(&ExpectedOrganization, "org", ExpectedOrganization, "Expected organization of the repo")
 	flag.StringVar(&ExpectedRepoHost, "repo-host", ExpectedRepoHost, "Expeted host for the repo")
 	flag.StringVar(&KeyRing, "key-ring", KeyRing, "The key ring to use for encryption")
-	flag.StringVar(&Location, "key-location", Location, "The location of the key ring")
+	flag.StringVar(&KeyLocation, "key-location", KeyLocation, "The location of the key ring")
 
 	flag.Parse()
 }

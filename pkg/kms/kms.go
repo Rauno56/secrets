@@ -27,7 +27,7 @@ func callKms(operation string, keyName string, plaintextFile string, ciphertextF
 		"gcloud",
 		"kms",
 		operation,
-		"--location", options.Location,
+		"--location", options.KeyLocation,
 		"--keyring", options.KeyRing,
 		"--key", keyName,
 		"--plaintext-file", plaintextFile,
@@ -59,7 +59,7 @@ func createKey(keyName string) error {
 		"--purpose", "encryption",
 		"--rotation-period", "100d",
 		"--next-rotation-time", "+p100d",
-		"--location", options.Location,
+		"--location", options.KeyLocation,
 		"--keyring", options.KeyRing,
 	)
 	if err != nil {
