@@ -2,8 +2,8 @@
 package log
 
 import (
-	"jobbatical/secrets/options"
-	"jobbatical/secrets/utils"
+	"jobbatical/secrets/pkg/options"
+	"jobbatical/secrets/pkg/utils"
 )
 
 var PrintDebugln = utils.NoopDebugln

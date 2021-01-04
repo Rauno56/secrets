@@ -2,8 +2,8 @@ package git
 
 import (
 	"errors"
-	"jobbatical/secrets/log"
-	"jobbatical/secrets/utils"
+	"jobbatical/secrets/pkg/log"
+	"jobbatical/secrets/pkg/utils"
 	"os"
 	"path"
 	"path/filepath"

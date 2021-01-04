@@ -4,8 +4,7 @@ package options
 import (
 	"errors"
 	"flag"
-	"fmt"
-	"jobbatical/secrets/utils"
+	"jobbatical/secrets/pkg/utils"
 	"os"
 	"path/filepath"
 	"strings"

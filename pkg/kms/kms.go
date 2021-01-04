@@ -2,9 +2,9 @@ package kms
 
 import (
 	"fmt"
-	"jobbatical/secrets/log"
-	"jobbatical/secrets/options"
-	"jobbatical/secrets/utils"
+	"jobbatical/secrets/pkg/log"
+	"jobbatical/secrets/pkg/options"
+	"jobbatical/secrets/pkg/utils"
 	"os"
 	"regexp"
 	"strings"
