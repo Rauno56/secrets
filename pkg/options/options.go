@@ -11,12 +11,13 @@ import (
 )
 
 const Usage string = "Usage secrets <open|seal> [<file path>...] [--dry-run] [--verbose] [--root <project root>] [--key <encryption key name>] [--open-all]"
-const ExpectedOrganization string = "jobbatical"
-const ExpectedRepoHost string = "github.com"
-const KeyRing string = "immi-project-secrets"
-const Location string = "global"
 const EncryptCmd string = "seal"
 const DecryptCmd string = "open"
+
+var ExpectedOrganization string = getEnvWithDefault("SECRETS_ORG", "jobbatical")
+var ExpectedRepoHost string = getEnvWithDefault("SECRETS_REPO_HOST", "github.com")
+var KeyRing string = getEnvWithDefault("SECRETS_KEY_RING", "immi-project-secrets")
+var Location string = getEnvWithDefault("SECRETS_KEY_LOCATION", "global")
 
 var DryRun bool
 var Key string
@@ -25,6 +26,14 @@ var ProjectRoot string
 var Verbose bool
 var Cmd string
 var Files []string
+
+func getEnvWithDefault(key string, fallback string) string {
+    value := os.Getenv(key)
+    if len(value) == 0 {
+        return fallback
+    }
+    return value
+}
 
 func Remove(slice []string, s int) []string {
 	return append(slice[:s], slice[s+1:]...)
@@ -78,11 +87,18 @@ func init() {
 	Files, os.Args, err = popFiles(os.Args)
 	utils.ExitIfError(err)
 
+	// Execution options
 	flag.BoolVar(&DryRun, "dry-run", false, "Skip calls to GCP")
 	flag.StringVar(&Key, "key", "", "Key to use")
 	flag.BoolVar(&OpenAll, "open-all", false, "Opens all .enc files within the repository")
 	flag.StringVar(&ProjectRoot, "root", "", "Project root folder(name will be used as key name)")
 	flag.BoolVar(&Verbose, "verbose", false, "Log debug info")
+
+	// Configuration
+	flag.StringVar(&ExpectedOrganization, "org", ExpectedOrganization, "Expected organization of the repo")
+	flag.StringVar(&ExpectedRepoHost, "repo-host", ExpectedRepoHost, "Expeted host for the repo")
+	flag.StringVar(&KeyRing, "key-ring", KeyRing, "The key ring to use for encryption")
+	flag.StringVar(&Location, "key-location", Location, "The location of the key ring")
 
 	flag.Parse()
 }

@@ -99,6 +99,7 @@ func main() {
 	log.PrintDebugln("options.ExpectedRepoHost: %s", options.ExpectedRepoHost)
 	log.PrintDebugln("keyRing: %s", options.KeyRing)
 	log.PrintDebugln("key: %s", key)
+	log.PrintDebugln("location: %s", options.Location)
 	log.PrintDebugln("project root: %s", projectRoot)
 	log.PrintDebugln("cmd: %s", options.Cmd)
 	log.PrintDebugln("files: %s (%d)", options.Files, len(options.Files))
