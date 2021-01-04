@@ -4,6 +4,7 @@ package options
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"jobbatical/secrets/pkg/utils"
 	"os"
 	"path/filepath"
@@ -14,10 +15,10 @@ const Usage string = "Usage secrets <open|seal> [<file path>...] [--dry-run] [--
 const EncryptCmd string = "seal"
 const DecryptCmd string = "open"
 
-var ExpectedOrganization string = getEnvWithDefault("SECRETS_ORG", "jobbatical")
-var ExpectedRepoHost string = getEnvWithDefault("SECRETS_REPO_HOST", "github.com")
-var KeyRing string = getEnvWithDefault("SECRETS_KEY_RING", "immi-project-secrets")
-var KeyLocation string = getEnvWithDefault("SECRETS_KEY_LOCATION", "global")
+var ExpectedOrganization string
+var ExpectedRepoHost string
+var KeyRing string
+var KeyLocation string
 
 var DryRun bool
 var Key string
@@ -26,14 +27,6 @@ var ProjectRoot string
 var Verbose bool
 var Cmd string
 var Files []string
-
-func getEnvWithDefault(key string, fallback string) string {
-    value := os.Getenv(key)
-    if len(value) == 0 {
-        return fallback
-    }
-    return value
-}
 
 func Remove(slice []string, s int) []string {
 	return append(slice[:s], slice[s+1:]...)
@@ -75,6 +68,14 @@ func popFiles(args []string) ([]string, []string, error) {
 	return files, os.Args, nil
 }
 
+func readRequiredConfig(v *string, argFlag string, envName string, desc string) {
+	flag.StringVar(v, argFlag, os.Getenv(envName), desc)
+	if len(*v) == 0 {
+		fmt.Fprintf(os.Stderr, "Missing required configuration: %s\nPlease set %s environment var or pass -%s flag\n", desc, envName, argFlag)
+		os.Exit(2)
+	}
+}
+
 func init() {
 	var err error
 
@@ -95,10 +96,10 @@ func init() {
 	flag.BoolVar(&Verbose, "verbose", false, "Log debug info")
 
 	// Configuration
-	flag.StringVar(&ExpectedOrganization, "org", ExpectedOrganization, "Expected organization of the repo")
-	flag.StringVar(&ExpectedRepoHost, "repo-host", ExpectedRepoHost, "Expeted host for the repo")
-	flag.StringVar(&KeyRing, "key-ring", KeyRing, "The key ring to use for encryption")
-	flag.StringVar(&KeyLocation, "key-location", KeyLocation, "The location of the key ring")
+	readRequiredConfig(&ExpectedOrganization, "org", "SECRETS_ORG", "Expected organization of the repo")
+	readRequiredConfig(&ExpectedRepoHost, "repo-host", "SECRETS_REPO_HOST", "Expected host for the repo")
+	readRequiredConfig(&KeyRing, "key-ring", "SECRETS_KEY_RING", "The key ring to use for encryption")
+	readRequiredConfig(&KeyLocation, "key-location", "SECRETS_KEY_LOCATION", "The location of the key ring")
 
 	flag.Parse()
 }
